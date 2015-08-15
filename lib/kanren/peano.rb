@@ -21,5 +21,13 @@ module Kanren
         to_integer(peano.right).succ
       end
     end
+
+    def to_peano(integer)
+      from_integer integer
+    end
+
+    def from_peano(peano)
+      to_integer peano
+    end
   end
 end
