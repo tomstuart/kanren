@@ -11,6 +11,17 @@ module Kanren
         @block.call state
       end
 
+      def pursue_in_each(states)
+        Enumerator.new do |yielder|
+          results = pursue_in(states.next)
+          results = Utils.interleave(results, pursue_in_each(states))
+
+          results.each do |state|
+            yielder.yield state
+          end
+        end
+      end
+
       def self.equal(a, b)
         new do |state|
           state = state.unify(a, b)

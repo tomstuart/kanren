@@ -18,6 +18,24 @@ module Kanren
         end
       end
 
+      describe '#pursue_in_each' do
+        let(:a) { double }
+        let(:b) { double }
+        let(:c) { double }
+        let(:a_results) { 3.times.map { double }.to_enum }
+        let(:b_results) { 4.times.map { double }.to_enum }
+        let(:c_results) { 5.times.map { double }.to_enum }
+        let(:goal) { Goal.new }
+
+        it 'pursues the goal in each state and interleaves the results' do
+          allow(goal).to receive(:pursue_in).with(a).and_return a_results
+          allow(goal).to receive(:pursue_in).with(b).and_return b_results
+          allow(goal).to receive(:pursue_in).with(c).and_return c_results
+          results = goal.pursue_in_each([a, b, c].to_enum)
+          expect(results).to contain_exactly *a_results, *b_results, *c_results
+        end
+      end
+
       describe '.equal' do
         it 'unifies its arguments' do
           state, (x, y, z) = State.new.create_variables [:x, :y, :z]
