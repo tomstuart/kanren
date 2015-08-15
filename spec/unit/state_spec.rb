@@ -1,4 +1,5 @@
 require 'kanren/micro/state'
+require 'kanren/pair'
 
 module Kanren
   module Micro
@@ -83,6 +84,19 @@ module Kanren
         it 'fails if the values cannot be made equal' do
           @state = @state.unify(@x, @y).unify(@x, 5).unify(@y, 6)
           expect(@state).to be_nil
+        end
+      end
+
+      context 'with pairs' do
+        describe 'unification' do
+          before(:example) do
+            @state, (@x, @y) = @state.create_variables [:x, :y]
+          end
+
+          it 'successfully unifies values within pairs' do
+            @state = @state.unify(Pair.new(3, @x), Pair.new(@y, Pair.new(5, @y)))
+            expect(@state.values).to eq @x => Pair.new(5, 3), @y => 3
+          end
         end
       end
     end

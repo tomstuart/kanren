@@ -1,4 +1,5 @@
 require 'kanren/micro/variable'
+require 'kanren/pair'
 
 module Kanren
   module Micro
@@ -21,6 +22,8 @@ module Kanren
       def value_of(key)
         if values.has_key?(key)
           value_of values.fetch(key)
+        elsif key.is_a?(Pair)
+          Pair.new(value_of(key.left), value_of(key.right))
         else
           key
         end
@@ -35,6 +38,9 @@ module Kanren
           assign_values a => b
         elsif b.is_a?(Variable)
           assign_values b => a
+        elsif a.is_a?(Pair) && b.is_a?(Pair)
+          state = unify(a.left, b.left)
+          state.unify(a.right, b.right) if state
         end
       end
     end
