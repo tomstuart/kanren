@@ -99,6 +99,24 @@ module Kanren
           end
         end
       end
+
+      describe 'extracting results' do
+        let(:x_value) { double }
+        let(:y_value) { double }
+
+        before(:example) do
+          @state, (x, y) = @state.create_variables [:x, :y]
+          @state = @state.assign_values x => x_value, y => y_value
+        end
+
+        it 'exposes the values of variables' do
+          expect(@state.results(2)).to eq [x_value, y_value]
+        end
+
+        it 'exposes the value of the outermost variable' do
+          expect(@state.result).to eq x_value
+        end
+      end
     end
   end
 end

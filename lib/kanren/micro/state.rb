@@ -43,6 +43,14 @@ module Kanren
           state.unify(a.right, b.right) if state
         end
       end
+
+      def results(n)
+        variables.first(n).map { |variable| value_of(variable) }
+      end
+
+      def result
+        results(1).first
+      end
     end
   end
 end
