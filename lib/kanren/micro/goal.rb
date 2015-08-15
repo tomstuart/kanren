@@ -50,6 +50,13 @@ module Kanren
           Utils.interleave first_stream, second_stream
         end
       end
+
+      def self.both(first_goal, second_goal)
+        new do |state|
+          states = first_goal.pursue_in(state)
+          second_goal.pursue_in_each states
+        end
+      end
     end
   end
 end

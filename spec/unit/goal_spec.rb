@@ -74,6 +74,40 @@ module Kanren
           expect { states.next }.to raise_error StopIteration
         end
       end
+
+      describe '.both' do
+        it 'satisfies both simple subgoals' do
+          goal = Goal.with_variables { |x, y| Goal.both(Goal.equal(x, 5), Goal.equal(y, 7)) }
+          states = goal.pursue_in(State.new)
+
+          state = states.next
+          x, y = state.variables
+          expect(state.values).to eq x => 5, y => 7
+
+          expect { states.next }.to raise_error StopIteration
+        end
+
+        it 'satisfies compound subgoals' do
+          goal = Goal.both Goal.with_variables { |a| Goal.equal(a, 7) }, Goal.with_variables { |b| Goal.either(Goal.equal(b, 5), Goal.equal(b, 6)) }
+          states = goal.pursue_in(State.new)
+
+          state = states.next
+          a, b = state.variables
+          expect(state.values).to eq a => 7, b => 5
+
+          state = states.next
+          a, b = state.variables
+          expect(state.values).to eq a => 7, b => 6
+
+          expect { states.next }.to raise_error StopIteration
+        end
+
+        it 'doesn’t satisfy contradictory goals' do
+          goal = Goal.with_variables { |x| Goal.both(Goal.equal(1, x), Goal.equal(x, 2)) }
+          states = goal.pursue_in(State.new)
+          expect { states.next }.to raise_error StopIteration
+        end
+      end
     end
   end
 end
