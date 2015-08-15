@@ -42,6 +42,21 @@ module Kanren
               expect(@state.values).to eq @x => @y, @y => @z, @z => 5
             end
           end
+
+          describe '#value_of' do
+            it 'looks up the final value of an assigned variable' do
+              expect(@state.value_of(@x)).to eq 5
+            end
+
+            it 'doesn’t affect a non-variable value' do
+              expect(@state.value_of(7)).to eq 7
+            end
+
+            it 'doesn’t affect an unassigned variable' do
+              @state, (a, b, c) = @state.create_variables [:a, :b, :c]
+              expect(@state.value_of(a)).to eq a
+            end
+          end
         end
       end
     end

@@ -17,6 +17,14 @@ module Kanren
       def assign_values(new_values)
         State.new(variables, values.merge(new_values))
       end
+
+      def value_of(key)
+        if values.has_key?(key)
+          value_of values.fetch(key)
+        else
+          key
+        end
+      end
     end
   end
 end
