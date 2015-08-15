@@ -28,6 +28,17 @@ module Kanren
           expect { states.next }.to raise_error StopIteration
         end
       end
+
+      describe '.with_variables' do
+        it 'introduces local variables' do
+          goal = Goal.with_variables { |x| Goal.equal x, 5 }
+          states = goal.pursue_in(State.new)
+          state = states.next
+          x = state.variables.first
+          expect(state.values).to eq x => 5
+          expect { states.next }.to raise_error StopIteration
+        end
+      end
     end
   end
 end

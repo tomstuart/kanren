@@ -18,6 +18,16 @@ module Kanren
           end
         end
       end
+
+      def self.with_variables(&block)
+        names = block.parameters.map { |type, name| name }
+
+        new do |state|
+          state, variables = state.create_variables(names)
+          goal = block.call(*variables)
+          goal.pursue_in state
+        end
+      end
     end
   end
 end
