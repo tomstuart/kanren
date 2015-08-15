@@ -1,4 +1,5 @@
 require 'kanren/micro/goal'
+require 'kanren/micro/state'
 
 module Kanren
   module Micro
@@ -14,6 +15,17 @@ module Kanren
 
         it 'yields the state to the block' do
           expect { |block| Goal.new(&block).pursue_in(state) }.to yield_with_args(state)
+        end
+      end
+
+      describe '.equal' do
+        it 'unifies its arguments' do
+          state, (x, y, z) = State.new.create_variables [:x, :y, :z]
+          goal = Goal.equal(x, 5)
+          states = goal.pursue_in(state)
+          state = states.next
+          expect(state.values).to eq x => 5
+          expect { states.next }.to raise_error StopIteration
         end
       end
     end
