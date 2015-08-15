@@ -59,6 +59,32 @@ module Kanren
           end
         end
       end
+
+      describe '#unify' do
+        before(:example) do
+          @state, (@x, @y) = @state.create_variables [:x, :y]
+        end
+
+        it 'changes nothing if the values are already equal' do
+          @state = @state.unify(@x, @x)
+          expect(@state.values).to be_empty
+        end
+
+        it 'adds an assignment to the state if the first value is an unassigned variable' do
+          @state = @state.unify(@x, @y)
+          expect(@state.values).to eq @x => @y
+        end
+
+        it 'adds an assignment to the state if the second value is an unassigned variable' do
+          @state = @state.unify(@x, @y).unify(@x, 5)
+          expect(@state.values).to eq @x => @y, @y => 5
+        end
+
+        it 'fails if the values cannot be made equal' do
+          @state = @state.unify(@x, @y).unify(@x, 5).unify(@y, 6)
+          expect(@state).to be_nil
+        end
+      end
     end
   end
 end

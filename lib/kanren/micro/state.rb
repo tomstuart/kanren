@@ -25,6 +25,18 @@ module Kanren
           key
         end
       end
+
+      def unify(a, b)
+        a, b = value_of(a), value_of(b)
+
+        if a == b
+          self
+        elsif a.is_a?(Variable)
+          assign_values a => b
+        elsif b.is_a?(Variable)
+          assign_values b => a
+        end
+      end
     end
   end
 end
