@@ -43,6 +43,24 @@ module Kanren
           }
         )
       end
+
+      def multiply(x, y, z)
+        Goal.either(
+          Goal.both(
+            Goal.equal(x, Peano::ZERO),
+            Goal.equal(z, Peano::ZERO)
+          ),
+          Goal.with_variables { |smaller_x, smaller_z|
+            Goal.both(
+              Goal.both(
+                Goal.equal(x, Pair.new(Peano::SUCC, smaller_x)),
+                add(smaller_z, y, z)
+              ),
+              multiply(smaller_x, y, smaller_z)
+            )
+          }
+        )
+      end
     end
   end
 end

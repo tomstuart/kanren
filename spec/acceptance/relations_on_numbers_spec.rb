@@ -48,6 +48,37 @@ module Kanren
             ]
           end
         end
+
+        describe 'multiplication' do
+          it 'mutiplies two numbers' do
+            goal = Goal.with_variables { |x|
+              Relations.multiply(Peano.from_integer(3), Peano.from_integer(8), x)
+            }
+            states = goal.pursue_in(State.new)
+
+            results = states.take(1).map { |state| Peano.to_integer(state.result) }
+            expect(results).to eq [24]
+          end
+
+          it 'finds all pairs of numbers which are equal to another when multiplied' do
+            goal = Goal.with_variables { |x, y|
+              Relations.multiply(x, y, Peano.from_integer(24))
+            }
+            states = goal.pursue_in(State.new)
+
+            results = states.take(8).map { |state| state.results(2).map(&Peano.method(:to_integer)) }
+            expect(results).to eq [
+              [1, 24],
+              [2, 12],
+              [3, 8],
+              [4, 6],
+              [6, 4],
+              [8, 3],
+              [12, 2],
+              [24, 1]
+            ]
+          end
+        end
       end
     end
   end
