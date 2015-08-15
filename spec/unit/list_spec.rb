@@ -17,5 +17,24 @@ module Kanren
         expect(List.to_array(list)).to eq array
       end
     end
+
+    describe 'backwards compatibility' do
+      let(:argument) { double }
+      let(:result) { double }
+
+      describe '#to_list' do
+        it 'is an alias for #from_array' do
+          expect(List).to receive(:from_array).with(argument).and_return(result)
+          expect(List.to_list(argument)).to eq result
+        end
+      end
+
+      describe '#from_list' do
+        it 'is an alias for #to_array' do
+          expect(List).to receive(:to_array).with(argument).and_return(result)
+          expect(List.from_list(argument)).to eq result
+        end
+      end
+    end
   end
 end

@@ -23,5 +23,13 @@ module Kanren
         [first, *to_array(rest)]
       end
     end
+
+    def to_list(array)
+      from_array array
+    end
+
+    def from_list(list)
+      to_array list
+    end
   end
 end
