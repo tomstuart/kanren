@@ -39,6 +39,23 @@ module Kanren
           expect { states.next }.to raise_error StopIteration
         end
       end
+
+      describe '.either' do
+        it 'satisfies either subgoal' do
+          goal = Goal.with_variables { |x| Goal.either Goal.equal(x, 5), Goal.equal(x, 6) }
+          states = goal.pursue_in(State.new)
+
+          state = states.next
+          x = state.variables.first
+          expect(state.values).to eq x => 5
+
+          state = states.next
+          x = state.variables.first
+          expect(state.values).to eq x => 6
+
+          expect { states.next }.to raise_error StopIteration
+        end
+      end
     end
   end
 end

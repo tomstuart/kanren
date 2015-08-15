@@ -1,3 +1,5 @@
+require 'kanren/utils'
+
 module Kanren
   module Micro
     class Goal
@@ -26,6 +28,15 @@ module Kanren
           state, variables = state.create_variables(names)
           goal = block.call(*variables)
           goal.pursue_in state
+        end
+      end
+
+      def self.either(first_goal, second_goal)
+        new do |state|
+          first_stream = first_goal.pursue_in(state)
+          second_stream = second_goal.pursue_in(state)
+
+          Utils.interleave first_stream, second_stream
         end
       end
     end
