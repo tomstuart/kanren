@@ -1,0 +1,5 @@
+require 'kanren/list'
+require 'kanren/micro'
+require 'kanren/pair'
+require 'kanren/peano'
+require 'kanren/utils'
