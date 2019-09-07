@@ -1,5 +1,7 @@
 # Kanren
 
+![](https://github.com/tomstuart/kanren/workflows/Ruby/badge.svg)
+
 This library provides an example Ruby implementation of [μKanren](http://webyrd.net/scheme-2013/papers/HemannMuKanren2013.pdf), along with some simple data structures and relations. It is intended to accompany the article [“Hello, declarative world”](http://codon.com/hello-declarative-world).
 
 That article explains the details, but here’s a brief demonstration:
